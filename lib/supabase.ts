@@ -30,6 +30,23 @@ export interface Cafe {
   created_at: string
 }
 
+// Order types
+export interface OrderItem {
+  dish_id: string
+  name: string
+  price: number
+  quantity: number
+}
+
+export interface Order {
+  id: string
+  table_no: string
+  items: OrderItem[]
+  total_price: number
+  status: 'pending' | 'preparing' | 'served'
+  created_at: string
+}
+
 // Trial & Billing types
 export interface UserSubscription {
   id: string
