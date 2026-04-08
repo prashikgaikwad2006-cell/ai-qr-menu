@@ -6,7 +6,6 @@ import { CreditCard, CheckCircle, Loader2, ArrowLeft, Smartphone } from 'lucide-
 import Link from 'next/link'
 import { getUserSubscription, saveUserSubscription, UserSubscription } from '@/lib/supabase'
 
-const UPI_ID = '9322763848@ybl'
 const PRICE = '₹10,000'
 
 export default function BillingPage() {
@@ -97,9 +96,6 @@ export default function BillingPage() {
                 />
               </div>
             </div>
-            <p className="text-center text-gray-400 mt-4">
-              Or pay to UPI ID: <span className="text-gold font-mono">{UPI_ID}</span>
-            </p>
           </div>
 
           {/* UTR Input */}
