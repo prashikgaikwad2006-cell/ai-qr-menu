@@ -142,8 +142,19 @@ export default function AdminPage() {
     })
   }
 
+  // Get the base URL - use env var, or fallback to current window origin
+  function getBaseUrl() {
+    if (process.env.NEXT_PUBLIC_APP_URL) {
+      return process.env.NEXT_PUBLIC_APP_URL
+    }
+    if (typeof window !== 'undefined' && window.location.origin) {
+      return window.location.origin
+    }
+    return 'http://localhost:3000'
+  }
+
   async function generateQRCode() {
-    const menuUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/menu/${DEMO_CAFE_ID}`
+    const menuUrl = `${getBaseUrl()}/menu/${DEMO_CAFE_ID}`
     const qrDataUrl = await QRCode.toDataURL(menuUrl, {
       width: 300,
       margin: 2,
@@ -217,7 +228,7 @@ export default function AdminPage() {
                   </div>
                 )}
                 <p className="text-sm text-gray-500 break-all font-mono">
-                  {process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/menu/{DEMO_CAFE_ID}
+                  {getBaseUrl()}/menu/{DEMO_CAFE_ID}
                 </p>
                 <button
                   onClick={() => setShowQR(false)}
