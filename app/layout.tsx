@@ -8,8 +8,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AI Digital QR Menu | SaaS for Cafes",
-  description: "Premium digital menu platform for cafes with AI-powered descriptions and QR code system",
+  title: "AI Digital QR Menu | Smart Digital Menu for Cafes & Restaurants",
+  description: "Transform your cafe menu with AI-powered descriptions. Generate instant QR codes, attract customers with mouth-watering AI descriptions. Start free trial today!",
+  keywords: ["digital menu", "QR menu", "cafe menu", "AI menu", "restaurant menu", "digital QR menu", "smart menu"],
+  openGraph: {
+    title: "AI Digital QR Menu | Smart Digital Menu for Cafes",
+    description: "Transform your cafe menu with AI-powered descriptions. Generate instant QR codes.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

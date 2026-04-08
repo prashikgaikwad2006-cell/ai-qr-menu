@@ -9,11 +9,13 @@ import {
   Sparkles,
   QrCode,
   Utensils,
-  Loader2
+  Loader2,
+  CreditCard
 } from 'lucide-react'
-import { supabase, Dish, DEMO_DISHES, isSupabaseConfigured } from '@/lib/supabase'
+import { supabase, Dish, DEMO_DISHES, isSupabaseConfigured, getUserSubscription, canAccessAI, isTrialExpired, UserSubscription } from '@/lib/supabase'
 import { generateDishDescription } from '@/lib/gemini'
 import QRCode from 'qrcode'
+import TrialOverlay from '@/components/TrialOverlay'
 
 // Demo cafe ID - in production, this would come from auth
 const DEMO_CAFE_ID = 'demo-cafe'
@@ -37,10 +39,22 @@ export default function AdminPage() {
   })
 
   const [demoMode, setDemoMode] = useState(false)
+  const [subscription, setSubscription] = useState<UserSubscription | null>(null)
+  const [showTrialOverlay, setShowTrialOverlay] = useState(false)
 
   useEffect(() => {
     const configured = isSupabaseConfigured()
     setDemoMode(!configured)
+
+    // Check subscription status
+    const sub = getUserSubscription()
+    setSubscription(sub)
+
+    // Show overlay if trial expired
+    if (sub && isTrialExpired(sub)) {
+      setShowTrialOverlay(true)
+    }
+
     if (configured) {
       fetchDishes()
     } else {
@@ -64,6 +78,13 @@ export default function AdminPage() {
 
   async function handleGenerateDescription() {
     if (!formData.name) return
+
+    // Check if user can access AI features
+    if (!canAccessAI(subscription)) {
+      setShowTrialOverlay(true)
+      return
+    }
+
     setGeneratingDesc(true)
     try {
       const description = await generateDishDescription(formData.name)
@@ -169,6 +190,12 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] p-4 md:p-8">
+      {/* Trial Overlay - Shows when trial expired */}
+      <AnimatePresence>
+        {showTrialOverlay && (
+          <TrialOverlay onUpgrade={() => setShowTrialOverlay(false)} />
+        )}
+      </AnimatePresence>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
